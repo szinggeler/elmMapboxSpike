@@ -84,40 +84,37 @@ lyrs =
 
         --, Layer.visibility (str "visible")
         ]
+    , Layer.symbol "osm_labels_green-areas"
+        "OpenMapTiles"
+        [ Layer.sourceLayer "poi"
+        , Layer.minzoom 15
+        , Layer.maxzoom 22
+        , Layer.filter (E.getProperty (str "class") |> E.matchesStr [ ( "cemetery", true ), ( "park", true ) ] false)
+        , Layer.textOpacity (float 1)
+        , Layer.textColor (E.rgba 87 166 38 1)
+        , Layer.textHaloColor (E.rgba 245 245 245 1)
+        , Layer.textHaloWidth (float 0.5)
+        , Layer.textHaloBlur (float 0.5)
+        , Layer.symbolPlacement E.point
+        , Layer.textRotationAlignment E.viewport
+        , Layer.textField (E.toFormattedText (E.getProperty (str "name:latin")))
+        , Layer.textFont (E.strings [ "Roboto Regular" ])
+        , Layer.textSize (E.zoom |> E.interpolate (E.Exponential 1) [ ( 15, float 11.5 ), ( 18, float 15 ) ])
+        , Layer.textMaxWidth (float 10)
+        , Layer.textLineHeight (float 1.1)
+        , Layer.textLetterSpacing (float 0.01)
+        , Layer.textJustify E.center
+        , Layer.textAnchor E.center
+        , Layer.textMaxAngle (float 45)
+        , Layer.textRotate (float 0)
+        , Layer.textPadding (float 2)
+        , Layer.textKeepUpright true
+        , Layer.textTransform E.none
+        , Layer.textOffset (E.floats [ 0, 0 ])
+        , Layer.textAllowOverlap false
 
-    {-
-       , Layer.symbol "osm_labels_green-areas"
-           "OpenMapTiles"
-           [ Layer.sourceLayer "poi"
-           , Layer.minzoom 15
-           , Layer.maxzoom 22
-           , Layer.filter (E.getProperty (str "class") |> E.matchesStr [ ( "cemetery", true ), ( "park", true ) ] false)
-           , Layer.textOpacity (float 1)
-           , Layer.textColor (E.rgba 87 166 38 1)
-           , Layer.textHaloColor (E.rgba 245 245 245 1)
-           , Layer.textHaloWidth (float 0.5)
-           , Layer.textHaloBlur (float 0.5)
-           , Layer.symbolPlacement E.point
-           , Layer.textRotationAlignment E.viewport
-           , Layer.textField (E.toFormattedText (E.getProperty (str "name:latin")))
-           , Layer.textFont (E.strings [ "Roboto Regular" ])
-           , Layer.textSize (E.zoom |> E.interpolate (E.Exponential 1) [ ( 15, float 11.5 ), ( 18, float 15 ) ])
-           , Layer.textMaxWidth (float 10)
-           , Layer.textLineHeight (float 1.1)
-           , Layer.textLetterSpacing (float 0.01)
-           , Layer.textJustify E.center
-           , Layer.textAnchor E.center
-           , Layer.textMaxAngle (float 45)
-           , Layer.textRotate (float 0)
-           , Layer.textPadding (float 2)
-           , Layer.textKeepUpright true
-           , Layer.textTransform E.none
-           , Layer.textOffset (E.floats [ 0, 0 ])
-           , Layer.textAllowOverlap false
-
-           --, Layer.visibility (str "visible")
-           ]
-    -}
+        --, Layer.visibility (str "visible")
+        ]
     , Layer.symbol "osm_labels_leisure"
         "OpenMapTiles"
         [ Layer.sourceLayer "poi"

@@ -1,5 +1,7 @@
 module Styles.Swisstopo exposing (style)
 
+import Json.Decode
+import Json.Encode
 import LngLat as LngLat
 import Mapbox.Expression as E exposing (false, float, str, true)
 import Mapbox.Layer as Layer
@@ -27,9 +29,16 @@ style =
                 ++ Styles.SwisstopoOSMLayers.lyrs
                 ++ Styles.SwisstopoOpenMapTilesLayers.lyrs
                 ++ Styles.SwisstopoLayers.lyrs
+                ++ [ Layer.fill "changes"
+                        "changes"
+                        [ Layer.fillOpacity (E.ifElse (E.toBool (E.featureState (str "hover"))) (float 0.8) (float 0.5))
+                        , Layer.fillColor (E.rgba 255 50 50 1)
+                        ]
+                   ]
         , sources =
             [ Source.vectorFromUrl "OpenMapTiles" "https://vectortiles10.geo.admin.ch/mbtiles/org.openstreetmap-openmaptiles.vt/v001.json"
             , Source.vectorFromUrl "Leichte Basiskarte" "https://vectortiles10.geo.admin.ch/mbtiles/ch.swisstopo.leichte-basiskarte.vt/v006.json"
+            , Source.geoJSONFromValue "changes" [] geojson
             ]
         , misc =
             [ Style.sprite "https://vectortiles10.geo.admin.ch/gl-styles/ch.swisstopo.leichte-basiskarte.vt/v006/sprite"
@@ -41,3 +50,33 @@ style =
             , Style.defaultCenter <| LngLat.LngLat 8.52 47.38
             ]
         }
+
+
+geojson =
+    Json.Decode.decodeString Json.Decode.value """
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": 1,
+      "properties": {
+        "name": "Bermuda Triangle",
+        "area": 1150180
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [ 8.5439571, 47.3782183 ],
+            [ 8.5400981, 47.3775590 ],
+            [ 8.5415751, 47.3774021 ],
+            [ 8.5409962, 47.3765152 ],
+            [ 8.5439571, 47.3782183 ]
+          ]
+        ]
+      }
+    }
+  ]
+}
+""" |> Result.withDefault (Json.Encode.object [])
