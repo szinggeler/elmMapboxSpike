@@ -35478,7 +35478,7 @@ var author$project$Main$view = function (model) {
 											mdgriffith$elm_ui$Element$width(mdgriffith$elm_ui$Element$fill)
 										]),
 									{
-										label: mdgriffith$elm_ui$Element$text('Style ändern'),
+										label: mdgriffith$elm_ui$Element$text('Style wechseln'),
 										onPress: elm$core$Maybe$Just(author$project$Main$SwapStyle)
 									})
 								])),
@@ -40004,7 +40004,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "35585" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "38453" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

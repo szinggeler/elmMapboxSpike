@@ -145,7 +145,7 @@ view model =
                         }
                     , Input.button [ padding 5, width fill ]
                         { onPress = Just SwapStyle
-                        , label = text "Style ändern"
+                        , label = text "Style wechseln"
                         }
                     ]
                 , Element.html css
