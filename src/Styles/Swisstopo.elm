@@ -61,8 +61,8 @@ geojson =
       "type": "Feature",
       "id": 1,
       "properties": {
-        "name": "Bermuda Triangle",
-        "area": 1150180
+        "name": "Stampfenbachstrasse 12",
+        "area": 123
       },
       "geometry": {
         "type": "Polygon",

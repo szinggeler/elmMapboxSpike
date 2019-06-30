@@ -14,6 +14,7 @@ import Mapbox.Expression as E exposing (false, float, int, str, true)
 import Mapbox.Layer as Layer
 import Mapbox.Source as Source
 import Mapbox.Style as Style exposing (Style(..))
+import Styles.Dark
 import Styles.Swisstopo
 
 
@@ -27,13 +28,28 @@ main =
 
 
 init () =
-    ( { position = LngLat 8.52 47.38, features = [] }, Cmd.none )
+    ( { position = LngLat 8.52 47.38, features = [], mapStyle = Dark }, Cmd.none )
 
 
 type Msg
     = Hover EventData
     | Click EventData
     | GoToCoord LngLat
+    | SwapStyle
+
+
+type MapStyle
+    = Dark
+    | Swisstopo
+
+
+setMapStyle style =
+    case style of
+        Dark ->
+            Styles.Dark.style
+
+        Swisstopo ->
+            Styles.Swisstopo.style
 
 
 update msg model =
@@ -58,6 +74,22 @@ update msg model =
               }
             , flyToCmd (LngLat 8.5439571 47.3782183) 17
               --, MapCommands.fitBounds [ Opt.linear True, Opt.maxZoom 15 ] ( LngLat.map (\a -> Debug.log "lng" a - 0.002) lngLat, LngLat.map (\a -> Debug.log "lat" a + 0.002) lngLat )
+            )
+
+        SwapStyle ->
+            let
+                newStyle =
+                    case model.mapStyle of
+                        Swisstopo ->
+                            Dark
+
+                        Dark ->
+                            Swisstopo
+            in
+            ( { model
+                | mapStyle = newStyle
+              }
+            , Cmd.none
             )
 
 
@@ -101,14 +133,19 @@ view model =
                 [ column
                     [ width (px 200)
                     , height fill
+                    , padding 5
                     ]
-                    [ Input.button [ padding 5 ]
+                    [ Input.button [ padding 5, width fill ]
                         { onPress = Just (GoToCoord (LngLat 8.7286826 47.4989597))
                         , label = text "Nach Winti fliegen"
                         }
-                    , Input.button [ padding 5 ]
+                    , Input.button [ padding 5, width fill ]
                         { onPress = Just (GoToCoord (LngLat 8.5432295 47.3781895))
                         , label = text "Nach Zürich"
+                        }
+                    , Input.button [ padding 5, width fill ]
+                        { onPress = Just SwapStyle
+                        , label = text "Style ändern"
                         }
                     ]
                 , Element.html css
@@ -126,7 +163,9 @@ view model =
                             , eventFeaturesLayers [ "changes" ]
                             , hoveredFeatures model.features
                             ]
-                            Styles.Swisstopo.style
+                            --Styles.Swisstopo.style
+                            --Styles.Dark.style
+                            (setMapStyle model.mapStyle)
                         )
                     )
                 ]
