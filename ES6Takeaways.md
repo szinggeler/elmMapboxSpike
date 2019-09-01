@@ -1,4 +1,12 @@
-ES6-Takeaways
+**ES6-Takeaways**
+
+	ES6 in Motion
+	Wes Higbee
+	Course duration: 7h 15m
+	127 exercises
+	- https://www.manning.com/livevideo/es6-in-motion
+	- https://github.com/g0t4/es6-in-motion
+	- https://git.io/v68XM
 
 HISTORY
 =======
@@ -189,10 +197,84 @@ const orders = [
 ];
 
 for (let i=0; i<orders.length; i++) {console.log(orders[i])}
-
 for (const order in orders) {console.log(order)}
-
 for (const order of orders) {console.log(order)}
+
+// const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+function positiveNumbersUpTo(stop) {
+  const iterable = {
+    [Symbol.iterator](){
+      // return iterator
+      let current = 1;
+      return {
+      	next() {
+      		if (stop < current) {
+      			return {done: true}
+      		}
+      		return {done: false, value: current++}
+      	}
+      }
+
+    }
+  };
+  return iterable;
+}
+
+const numbers = [...positiveNumbersUpTo(9)];
+console.log(numbers);
+
+
+GENERATOR
+=========
+
+- syntactic sugar für iterator
+- function*
+- yield : mehrere return values
+
+// const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+function* positiveNumbersUpTo(stop) {
+    let current = 1;
+    while (current <= stop)
+    	yield current++;
+}
+
+const numbers = [...positiveNumbersUpTo(9)];
+console.log(numbers);
+
+
+PROMISES
+========
+
+- asynchron (web requests, geolocation, setTimeout...)
+- ersetzen callbacks, die schwer lesbar sind
+- fetch-API : const promise = fetch(weburl);
+- promise.then(callbackFunction);
+
+setTimeout(function() {
+  console.log("after delay")
+}, 1000);
+
+-Beispiel
+	const museumsDatasetUrl = "../../datasets/museums.json";
+	const requestPromise = fetch(museumsDatasetUrl);
+
+	requestPromise.then(function (response) {
+	  const parsePromise = response.json();
+	  parsePromise.then(function (museums) {
+	    console.log(museums);
+	  });
+	  console.log(response);
+	});
+
+- besser:
+	const museumsDatasetUrl = "../../datasets/museums.json";
+
+	fetch(museumsDatasetUrl)
+		.then(response => response.json())
+		.then(museums => console.log(museums))
+		// errors wird ausgeführt wenn irgendwo ein Fehler auftritt
+		.catch(error => console.log("oh no ", error));
+
 
 
 CLASSES
